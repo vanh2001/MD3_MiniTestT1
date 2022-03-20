@@ -61,4 +61,46 @@ insert into Classes (id, name, language, description) values (4,'Lớp 4', 'C#',
 insert into Classes (id, name, language, description) values (5,'Lớp 5', 'Javascript', 'abc');
 select * from Classes;
 
-#
+#Thêm 10 bản ghi trong Student
+insert into Students (id, fullName, address_id, age, phone, class_id) values (1, 'Tô Việt Anh', 1, 20,'0329605770',1);
+insert into Students (id, fullName, address_id, age, phone, class_id) values (2, 'Nguyễn Văn Thành', 5, 18,'0961742730',5);
+insert into Students (id, fullName, address_id, age, phone, class_id) values (3, 'Hoàng Thanh Trúc', 3, 25,'0941900498',1);
+insert into Students (id, fullName, address_id, age, phone, class_id) values (4, 'Lê Hải Sơn', 2, 15,'0966061882',1);
+insert into Students (id, fullName, address_id, age, phone, class_id) values (5, 'Bùi Hoàng Nam', 1, 15,'0944414186',1);
+insert into Students (id, fullName, address_id, age, phone, class_id) values (6, 'Vũ Xuân Long', 5, 16,'0964330330',1);
+insert into Students (id, fullName, address_id, age, phone, class_id) values (7, 'Tô Thị Việt Linh', 1, 17,'0388394394',1);
+insert into Students (id, fullName, address_id, age, phone, class_id) values (8, 'Trương Thành Công', 2, 70,'0375688626',1);
+insert into Students (id, fullName, address_id, age, phone, class_id) values (9, 'Nguyễn Thành Công', 3, 36,'0796661990',1);
+insert into Students (id, fullName, address_id, age, phone, class_id) values (10, 'Nguyễn Thành Công', 1, 25,'0389928310',1);
+select * from Students;
+
+# Thêm 1 bản ghi trong Course
+insert into Course (id, name, description) values (1, 'Học cách học', 'Học chăm vào');
+select * from Course;
+
+# Thêm 15 bản ghi trong Point
+insert into Point (id, course_id, student_id, point) values (1, 1, 1, 5.0);
+insert into Point (id, course_id, student_id, point) values (2, 1, 2, 6.0);
+insert into Point (id, course_id, student_id, point) values (3, 1, 3, 7.0);
+insert into Point (id, course_id, student_id, point) values (4, 1, 4, 1.0);
+insert into Point (id, course_id, student_id, point) values (5, 1, 5, 5.5);
+insert into Point (id, course_id, student_id, point) values (6, 1, 6, 9.5);
+insert into Point (id, course_id, student_id, point) values (7, 1, 7, 10.0);
+select * from Point;
+
+# Tìm kiếm HV có họ Nguyen
+select * from Students where Students.fullName like 'Nguyễn%';
+
+# Tìm kiếm HV có tên Anh
+select * from Students where Students.fullName like '%Anh';
+
+# Tìm kiếm HV có độ tuổi từ 18 - 25
+select * from Students where age between 15 and 25;
+
+# Tìm kiếm HV có id là 12 hoặc 12
+select * from Students where id = 12 or id like '12';
+
+# Thống kê số lượng HV các lớp
+select count(id) as SOLUONGHV  from Students;
+
+# Thống kê số lượng HV tại các tỉnh
