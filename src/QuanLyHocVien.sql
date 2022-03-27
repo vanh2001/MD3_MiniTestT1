@@ -76,16 +76,17 @@ select * from Students;
 
 # Thêm 1 bản ghi trong Course
 insert into Course (id, name, description) values (1, 'Học cách học', 'Học chăm vào');
+insert into Course (id, name, description) values (2, 'Bootcamping', 'JavaCore');
 select * from Course;
 
 # Thêm 15 bản ghi trong Point
 insert into Point (id, course_id, student_id, point) values (1, 1, 1, 5.0);
-insert into Point (id, course_id, student_id, point) values (2, 1, 2, 6.0);
-insert into Point (id, course_id, student_id, point) values (3, 1, 3, 7.0);
+insert into Point (id, course_id, student_id, point) values (2, 2, 2, 6.0);
+insert into Point (id, course_id, student_id, point) values (3, 2, 3, 7.0);
 insert into Point (id, course_id, student_id, point) values (4, 1, 4, 1.0);
-insert into Point (id, course_id, student_id, point) values (5, 1, 5, 5.5);
+insert into Point (id, course_id, student_id, point) values (5, 2, 5, 5.5);
 insert into Point (id, course_id, student_id, point) values (6, 1, 6, 9.5);
-insert into Point (id, course_id, student_id, point) values (7, 1, 7, 10.0);
+insert into Point (id, course_id, student_id, point) values (7, 2, 7, 10.0);
 select * from Point;
 
 # Tìm kiếm HV có họ Nguyen
@@ -104,3 +105,15 @@ select * from Students where id = 12 or id like '12';
 select count(id) as SOLUONGHV  from Students;
 
 # Thống kê số lượng HV tại các tỉnh
+
+# Tính điểm trung bình của các khóa học
+
+# Đưa ra khóa học có điểm trung bình cao nhất
+(select name, avg(point) as AVERAGE from Course
+join Point on Course.id = Point.course_id
+group by name);
+
+select name, avg(point) as AVERAGE from Course
+join Point on Course.id = Point.course_id
+group by name
+having AVERAGE >= all(select avg(point) as AVERAGE from Course join Point on Course.id = Point.course_id group by name);
