@@ -149,7 +149,7 @@ join EnterCouponDetail ECD on EC.id = ECD.idEnterCoupon;
 # Tạo view có tên vw_CTPNHAP_VT bao gồm các thông tin sau: số phiếu nhập hàng, mã vật tư,
 # tên vật tư, số lượng nhập, đơn giá nhập, thành tiền nhập
 create view vw_CTPNHAP_VT as
-select codeEnterCoupon, idMaterial, nameMaterial , importQuantity, importUnitPrice , importQuantity*importUnitPrice as THANHTIENNHAP
+select codeEnterCoupon, codeMaterial, nameMaterial , importQuantity, importUnitPrice , importQuantity*importUnitPrice as THANHTIENNHAP
 from EnterCoupon EC
 join EnterCouponDetail ECD on EC.id = ECD.idEnterCoupon
 join Materials M on ECD.idMaterial = M.id;
@@ -185,3 +185,36 @@ join EnterCouponDetail ECD on M.id = ECD.idMaterial
 join EnterCoupon EC on ECD.idEnterCoupon = EC.id
 where importQuantity > 5;
 
+# Tạo view có tên vw_CTPNHAP_VT_loc bao gồm các thông tin sau: số phiếu nhập hàng, mã vật tư, tên vật tư, số lượng nhập,
+# đơn giá nhập, thành tiền nhập. Và chỉ liệt kê các chi tiết nhập vật tư có đơn vị tính là Bộ
+create view vw_CTPNHAP_VT_loc as
+select *
+from vw_CTPNHAP_VT;
+
+# Tạo view có tên vw_CTPXUAT bao gồm các thông tin sau: số phiếu xuất hàng, mã vật tư, số lượng xuất, đơn giá xuất, thành tiền xuất.
+create view vw_CTPXUAT as
+select codeDeliveryBill, codeMaterial, exportQuantity, exportUnitPrice, exportQuantity*exportUnitPrice as THANHTIENXUAT
+from DeliveryBill DB
+join DeliveryBillDetail DBD on DB.id = DBD.idDeliveryBill
+join Materials M on M.id = DBD.idMaterial;
+
+# Tạo view có tên vw_CTPXUAT_VT bao gồm các thông tin sau: số phiếu xuất hàng, mã vật tư, tên vật tư, số lượng xuất, đơn giá xuất
+create view vw_CTPXUAT_VT as
+select codeDeliveryBill, codeMaterial, nameMaterial, exportQuantity, exportUnitPrice
+from DeliveryBill DB
+join DeliveryBillDetail DBD on DB.id = DBD.idDeliveryBill
+join Materials M on M.id = DBD.idMaterial;
+
+# Tạo view có tên vw_CTPXUAT_VT_PX bao gồm các thông tin sau: số phiếu xuất hàng, tên khách hàng, mã vật tư, tên vật tư, số lượng xuất, đơn giá xuất
+create view vw_CTPXUAT_VT_PX as
+select codeDeliveryBill, nameCustomer, codeMaterial, nameMaterial, exportQuantity, exportUnitPrice
+from DeliveryBill DB
+join DeliveryBillDetail DBD on DB.id = DBD.idDeliveryBill
+join Materials M on M.id = DBD.idMaterial;
+
+#  Tạo Stored procedure (SP) cho biết tổng số lượng cuối của vật tư với mã vật tư là tham số vào
+DELIMITER //
+create procedure
+
+
+DELIMITER;
