@@ -186,10 +186,15 @@ join EnterCoupon EC on ECD.idEnterCoupon = EC.id
 where importQuantity > 5;
 
 # Tạo view có tên vw_CTPNHAP_VT_loc bao gồm các thông tin sau: số phiếu nhập hàng, mã vật tư, tên vật tư, số lượng nhập,
-# đơn giá nhập, thành tiền nhập. Và chỉ liệt kê các chi tiết nhập vật tư có đơn vị tính là Bộ
+# đơn giá nhập, thành tiền nhập. Và chỉ liệt kê các chi tiết nhập vật tư có đơn vị tính là Cân
 create view vw_CTPNHAP_VT_loc as
-select *
-from vw_CTPNHAP_VT;
+select codeEnterCoupon, codeMaterial, nameMaterial , importQuantity, importUnitPrice , importQuantity*importUnitPrice as THANHTIENNHAP
+from EnterCoupon EC
+join EnterCouponDetail ECD on EC.id = ECD.idEnterCoupon
+join Materials M on ECD.idMaterial = M.id
+where unitMaterial = 'Cân';
+
+select * from vw_CTPNHAP_VT_loc;
 
 # Tạo view có tên vw_CTPXUAT bao gồm các thông tin sau: số phiếu xuất hàng, mã vật tư, số lượng xuất, đơn giá xuất, thành tiền xuất.
 create view vw_CTPXUAT as
@@ -212,9 +217,29 @@ from DeliveryBill DB
 join DeliveryBillDetail DBD on DB.id = DBD.idDeliveryBill
 join Materials M on M.id = DBD.idMaterial;
 
-#  Tạo Stored procedure (SP) cho biết tổng số lượng cuối của vật tư với mã vật tư là tham số vào
+    # Tạo Stored procedure (SP) cho biết tổng số lượng cuối của vật tư với mã vật tư là tham số vào
 DELIMITER //
-create procedure
+create procedure getSumQuantityBycodeMaterial(IN material_id int)
+begin
+    # Dùng Declare để khai báo biến
+    declare storageQuantity int;
+    declare totalImport int;
+    declare totalExport int;
+    declare result int;
 
+    # Dùng Set để set lại biến
+    set storageQuantity = (select inputQuantity from Materials M1
+                            join Inventory I on M1.id = I.idMaterial
+                            where idMaterial = material_id);
+    set totalImport = (select importQuantity from EnterCouponDetail
+                        where idMaterial = material_id);
+    set totalExport = (select exportQuantity from DeliveryBillDetail
+                        where idMaterial = material_id);
+    set result = storageQuantity + totalImport - totalExport;
+#     Dùng select để lấy ra giá trị
+    select result;
+end //
+DELIMITER ;
+call getSumQuantityBycodeMaterial(2);
 
-DELIMITER;
+# Tạo SP cho biết tổng tiền xuất của vật tư với mã vật tư là tham số vào
